@@ -1,0 +1,34 @@
+version: "3"
+services:
+  authors:
+    build: ./authors
+    ports:
+      - "8091:8080"
+    expose:
+      - "8091"
+  books:
+    build: ./books
+    ports:
+      - "8092:8080"
+    expose:
+      - "8080"
+  frontend:
+    build: ./frontend
+    ports:
+      - "8093:8080"
+    depends_on:
+      - authors
+      - books
+    links:
+      - authors
+      - books
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    links:
+      - authors
+      - books
+      - frontend
