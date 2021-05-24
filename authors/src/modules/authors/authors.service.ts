@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { Author } from './authors.model';
+import { Author } from './authors.type';
+import { AuthorModel } from './authors.model';
 
 @Injectable()
 export class AuthorsService {
@@ -10,7 +11,7 @@ export class AuthorsService {
     this.authors = new Map();
     this.authors.set(
       1,
-      new Author(1)
+      new AuthorModel(1)
         .withFirstName('Loreth Anne')
         .withLastName('White')
         .withAge(60)
@@ -19,7 +20,7 @@ export class AuthorsService {
     );
     this.authors.set(
       2,
-      new Author(2)
+      new AuthorModel(2)
         .withFirstName('Lisa')
         .withLastName('Regan')
         .withAge(45)
@@ -28,7 +29,7 @@ export class AuthorsService {
     );
     this.authors.set(
       3,
-      new Author(3)
+      new AuthorModel(3)
         .withFirstName('Ty')
         .withLastName('Patterson')
         .withAge(55)
@@ -43,5 +44,39 @@ export class AuthorsService {
 
   public findById(id: number): Author {
     return this.authors.get(id);
+  }
+
+  public create(createAuthor: Partial<Author>): Author{
+    const id = Math.max(...this.authors.keys()) + 1;
+    const author = new AuthorModel(id)
+        .withFirstName(createAuthor.firstName)
+        .withLastName(createAuthor.lastName)
+        .withAge(createAuthor.age)
+        .withBiography(createAuthor.biography)
+        .withNumberOfBooks(createAuthor.numberOfBooks);
+
+    this.authors.set(
+        id,
+        author
+    );
+
+    return author;
+  }
+  public update(id: number, updateAuthor: Partial<Author>): Author{
+    const author = {
+      ...this.authors.get(id),
+      ...updateAuthor
+    };
+
+    this.authors.set(
+        id,
+        author
+    );
+
+    return author;
+  }
+
+  public delete(id: number): void{
+    this.authors.delete(id);
   }
 }

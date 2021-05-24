@@ -1,8 +1,6 @@
-export type Author = {
+export type Book = {
     id: number;
-    firstName: string;
-    lastName: string;
-    age: number;
-    biography: string;
-    numberOfBooks: number;
+    authorId: number;
+    title: string;
+    description: string;
 };

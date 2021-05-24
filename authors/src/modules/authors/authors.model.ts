@@ -1,4 +1,4 @@
-export class Author {
+export class AuthorModel {
   id: number;
   firstName: string;
   lastName: string;
@@ -10,27 +10,27 @@ export class Author {
     this.id = id;
   }
 
-  public withFirstName(firstName: string): Author {
-    firstName = firstName;
+  public withFirstName(firstName: string): AuthorModel {
+    this.firstName = firstName;
     return this;
   }
 
-  public withLastName(lastName: string): Author {
+  public withLastName(lastName: string): AuthorModel {
     this.lastName = lastName;
     return this;
   }
 
-  public withAge(age: number): Author {
+  public withAge(age: number): AuthorModel {
     this.age = age;
     return this;
   }
 
-  public withBiography(bio: string): Author {
+  public withBiography(bio: string): AuthorModel {
     this.biography = bio;
     return this;
   }
 
-  public withNumberOfBooks(num: number): Author {
+  public withNumberOfBooks(num: number): AuthorModel {
     this.numberOfBooks = num;
     return this;
   }
