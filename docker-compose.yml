@@ -2,22 +2,39 @@ version: "3"
 services:
   authors:
     build: ./authors
+    environment:
+      - AUTHORS_PATH=0.0.0.0:8081
     ports:
-      - "8091:8080"
+      - "8081:8081"
+    expose:
+      - "8081"
+    networks:
+      - mynet
   books:
     build: ./books
+    environment:
+      - BOOKS_PATH=0.0.0.0:8082
     ports:
-      - "8092:8080"
+      - "8082:8082"
+    expose:
+      - "8082"
+    networks:
+      - mynet
   frontend:
     build: ./frontend
     ports:
-      - "8093:8080"
+      - "8080:8080"
+    environment:
+      - AUTHORS_PATH=authors:8081
+      - BOOKS_PATH=books:8082
     depends_on:
       - authors
       - books
     links:
       - authors
       - books
+    networks:
+      - mynet
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
@@ -28,3 +45,8 @@ services:
       - authors
       - books
       - frontend
+    networks:
+      - mynet
+
+networks:
+  mynet:

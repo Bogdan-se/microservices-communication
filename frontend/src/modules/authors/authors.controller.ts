@@ -2,7 +2,7 @@ import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common'
 import { AuthorsService } from './authors.service';
 import { Author } from './authors.type';
 
-@Controller('v1/authors')
+@Controller('api/v1/authors')
 export class AuthorsController {
     constructor(private authorsService: AuthorsService) {}
 

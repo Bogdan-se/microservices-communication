@@ -2,7 +2,7 @@ import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common'
 import { BooksService } from './books.service';
 import { Book } from './books.type';
 
-@Controller('v1/books')
+@Controller('api/v1/books')
 export class BooksController {
     constructor(private booksService: BooksService) {}
 
