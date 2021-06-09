@@ -4,14 +4,10 @@ services:
     build: ./authors
     ports:
       - "8091:8080"
-    expose:
-      - "8091"
   books:
     build: ./books
     ports:
       - "8092:8080"
-    expose:
-      - "8080"
   frontend:
     build: ./frontend
     ports:

@@ -1,21 +1,36 @@
-import { Controller, Get } from '@nestjs/common';
-import { Authors } from '../authors/authors';
-import { Books } from '../books/books';
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { AuthorsService } from './authors.service';
+import { Author } from './authors.type';
 
-@Controller('v1/dashboard')
-export class DashboardController {
-    constructor(private authors: Authors, private books: Books) {}
+@Controller('v1/authors')
+export class AuthorsController {
+    constructor(private authorsService: AuthorsService) {}
 
     @Get()
-    async index() {
-        const [authors, books] = await Promise.all([
-            this.authors.findAll(),
-            this.books.findAll(),
-        ]);
+    async findAll(): Promise<Author[]> {
+        return this.authorsService.findAll();
+    }
 
-        return {
-            authors,
-            books
-        };
+    @Get(':id')
+    findOne(@Param('id') id: string): Promise<Author> {
+        return this.authorsService.findById(+id);
+    }
+
+    @Post()
+    create(@Body() createAuthor: Partial<Author>): Promise<Author> {
+        return this.authorsService.create(createAuthor);
+    }
+
+    @Put(':id')
+    update(
+        @Param('id') id: string,
+        @Body() updateAuthor: Partial<Author>,
+    ): Promise<Author> {
+        return this.authorsService.update(+id, updateAuthor);
+    }
+
+    @Delete(':id')
+    delete(@Param('id') id: string): Promise<void> {
+        return this.authorsService.delete(+id);
     }
 }

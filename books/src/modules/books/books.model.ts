@@ -1,4 +1,4 @@
-export class Book {
+export class BookModel {
   id: number;
   authorId: number;
   title: string;
@@ -8,17 +8,17 @@ export class Book {
     this.id = id;
   }
 
-  public withTitle(title: string): Book {
+  public withTitle(title: string): BookModel {
     this.title = title;
     return this;
   }
 
-  public withAuthorId(authorId: number): Book {
+  public withAuthorId(authorId: number): BookModel {
     this.authorId = authorId;
     return this;
   }
 
-  public withDescription(description: string): Book {
+  public withDescription(description: string): BookModel {
     this.description = description;
     return this;
   }
