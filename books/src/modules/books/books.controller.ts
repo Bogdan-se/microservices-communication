@@ -1,37 +1,39 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 
 import { Book } from './books.type';
 import { BooksService } from './books.service';
 
-@Controller('v1/books')
+@Controller()
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
-  @Get()
-  findAll(): Book[] {
-    return this.booksService.getBooks();
+  @GrpcMethod()
+  findAll(): {books: Book[]} {
+    return {books: this.booksService.getBooks()};
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Book {
-    return this.booksService.findById(+id);
+  @GrpcMethod()
+  findOne(data: {id: string}): Book {
+    return this.booksService.findById(+data.id);
   }
 
-  @Post()
-  create(@Body() createAuthor: Partial<Book>): Book {
-    return this.booksService.create(createAuthor);
+  @GrpcMethod()
+  create(createBookDTO: Partial<Book>): Book {
+    return this.booksService.create(createBookDTO);
   }
 
-  @Put(':id')
-  update(
-      @Param('id') id: string,
-      @Body() updateBook: Partial<Book>,
-  ): Book {
-    return this.booksService.update(+id, updateBook);
+  @GrpcMethod()
+  update(data: Partial<Book>): Book {
+    const { id, ...updateBookDTO } = data;
+
+    return this.booksService.update(+id, updateBookDTO);
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string): void {
+  @GrpcMethod()
+  delete(data: {id: string}): void {
+    const { id } = data;
+
     return this.booksService.delete(+id);
   }
 }

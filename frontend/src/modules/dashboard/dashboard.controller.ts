@@ -4,7 +4,7 @@ import { Author } from '../authors/authors.type';
 import { BooksService } from '../books/books.service';
 import { Book } from '../books/books.type';
 
-@Controller('v1/dashboard')
+@Controller('api/v1/dashboard')
 export class DashboardController {
     constructor(private authorsService: AuthorsService, private booksService: BooksService) {}
 

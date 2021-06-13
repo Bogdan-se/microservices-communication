@@ -1,37 +1,39 @@
-import { Controller, Get, Post, Put, Delete, Param, Body  } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
 
 import { AuthorsService } from './authors.service';
 import { Author } from './authors.type';
 
-@Controller('v1/authors')
+@Controller()
 export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
-  @Get()
-  findAll(): Author[] {
-    return this.authorsService.getAuthors();
+  @GrpcMethod()
+  findAll(): {authors: Author[]} {
+    return {authors: this.authorsService.getAuthors()};
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Author {
-    return this.authorsService.findById(+id);
+  @GrpcMethod()
+  findOne(data: {id: number}): Author {
+    return this.authorsService.findById(data.id);
   }
 
-  @Post()
-  create(@Body() createAuthor: Partial<Author>): Author {
-    return this.authorsService.create(createAuthor);
+  @GrpcMethod()
+  create(createAuthorDTO: Partial<Author>): Author {
+    return this.authorsService.create(createAuthorDTO);
   }
 
-  @Put(':id')
-  update(
-      @Param('id') id: string,
-      @Body() updateAuthor: Partial<Author>,
-  ): Author {
-    return this.authorsService.update(+id, updateAuthor);
+  @GrpcMethod()
+  update(data: Partial<Author>): Author {
+    const { id, ...updateAuthorDTO } = data;
+
+    return this.authorsService.update(id, updateAuthorDTO);
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string): void {
-    return this.authorsService.delete(+id);
+  @GrpcMethod()
+  delete(data: {id: number}): void {
+    const { id } = data;
+
+    return this.authorsService.delete(id);
   }
 }
