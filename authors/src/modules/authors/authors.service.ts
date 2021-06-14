@@ -6,36 +6,14 @@ import { AuthorModel } from './authors.model';
 @Injectable()
 export class AuthorsService {
   private readonly authors: Map<number, Author>;
+  private nextId = 1;
 
   constructor() {
     this.authors = new Map();
-    this.authors.set(
-      1,
-      new AuthorModel(1)
-        .withFirstName('Loreth Anne')
-        .withLastName('White')
-        .withAge(60)
-        .withBiography('Loreth Anne White Bio')
-        .withNumberOfBooks(2),
-    );
-    this.authors.set(
-      2,
-      new AuthorModel(2)
-        .withFirstName('Lisa')
-        .withLastName('Regan')
-        .withAge(45)
-        .withBiography('Lisa Regan Bio')
-        .withNumberOfBooks(1),
-    );
-    this.authors.set(
-      3,
-      new AuthorModel(3)
-        .withFirstName('Ty')
-        .withLastName('Patterson')
-        .withAge(55)
-        .withBiography('Ty Patterson Bio')
-        .withNumberOfBooks(2),
-    );
+  }
+
+  private getNextId() {
+    return this.nextId++;
   }
 
   public getAuthors(): Author[] {
@@ -47,7 +25,8 @@ export class AuthorsService {
   }
 
   public create(createAuthor: Partial<Author>): Author{
-    const id = Math.max(...this.authors.keys()) + 1;
+    const id = this.getNextId();
+
     const author = new AuthorModel(id)
         .withFirstName(createAuthor.firstName)
         .withLastName(createAuthor.lastName)
@@ -78,5 +57,29 @@ export class AuthorsService {
 
   public delete(id: number): void{
     this.authors.delete(id);
+  }
+
+  public increaseAuthorBooks(id): void{
+    const author = this.authors.get(id);
+
+    this.authors.set(
+      id,
+      {
+        ...author,
+        numberOfBooks: author.numberOfBooks + 1
+      }
+    );
+  }
+
+  public decreaseAuthorBooks(id): void{
+    const author = this.authors.get(id);
+
+    this.authors.set(
+      id,
+      {
+        ...author,
+        numberOfBooks: author.numberOfBooks - 1
+      }
+    );
   }
 }
